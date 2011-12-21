@@ -17,7 +17,10 @@ require 'collect'
 
 class Test::Unit::TestCase
   def run_with_transaction(*args, &block)
-    Sequel::Model.db.transaction(:rollback=>:always) { run_without_transaction(*args, &block) }
+    run_without_transaction(*args, &block)
+    [Collect::Question, Collect::Section, Collect::Form, Collect::Project].each do |klass|
+      klass.dataset.destroy
+    end
   end
   alias :run_without_transaction :run
   alias :run :run_with_transaction

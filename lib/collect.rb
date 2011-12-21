@@ -1,4 +1,5 @@
 require 'sequel'
+require 'sequel/extensions/inflector'
 require 'erb'
 require 'pathname'
 require 'yaml'
@@ -15,5 +16,6 @@ module Collect
 end
 
 path = Collect::Root + 'lib' + 'collect'
+require path + 'exceptions'
 require path + 'models'
 require path + 'utils'

@@ -28,7 +28,7 @@ module Collect
 
     def after_destroy
       super
-      if database_adapter == 'sqlite'
+      if database_adapter == 'sqlite' && File.exist?(sqlite_db_path)
         File.unlink(sqlite_db_path)
       end
     end
@@ -36,7 +36,7 @@ module Collect
     private
 
     def sqlite_db_path
-      (Root + 'db' + 'projects' + Env + pk.to_s).to_s
+      @sqlite_db_path ||= (Root + 'db' + 'projects' + Env + pk.to_s).to_s
     end
   end
 end

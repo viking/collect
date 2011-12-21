@@ -69,4 +69,31 @@ class TestForm < Test::Unit::TestCase
     form = new_form
     assert_respond_to form, :sections
   end
+
+  test "publish a new form" do
+    form = new_form(:name => 'foo')
+    assert form.save
+
+    section = Collect::Section.create(:name => 'foo', :form => form)
+    question = Collect::Question.create(:name => 'foo', :prompt => 'Foo?', :type => 'String', :section => section)
+
+    form.publish!
+    assert_equal 'published', form.status
+
+    @project.database do |db|
+      assert_include db.tables, :foos
+      assert_equal [:id, :foo], db[:foos].columns
+    end
+  end
+
+  test "publish a published form" do
+    form = new_form(:name => 'foo')
+    assert form.save
+
+    section = Collect::Section.create(:name => 'foo', :form => form)
+    question = Collect::Question.create(:name => 'foo', :prompt => 'Foo?', :type => 'String', :section => section)
+
+    form.publish!
+    assert_raises(Collect::FormAlreadyPublishedException) { form.publish! }
+  end
 end
