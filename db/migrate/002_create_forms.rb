@@ -5,8 +5,9 @@ Sequel.migration do
       foreign_key :project_id, :projects
       String :name
       String :slug
-      TrueClass :repeatable
       String :status
+      TrueClass :repeatable
+      TrueClass :primary
     end
   end
 end

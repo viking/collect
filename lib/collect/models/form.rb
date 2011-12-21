@@ -1,6 +1,7 @@
 module Collect
   class Form < Sequel::Model
     many_to_one :project
+    one_to_many :sections
 
     def before_validation
       super
@@ -11,7 +12,7 @@ module Collect
 
     def validate
       super
-      validates_presence :name
+      validates_presence [:name, :project_id]
       validates_unique :name, :slug
     end
   end

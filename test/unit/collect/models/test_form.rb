@@ -3,7 +3,14 @@ require 'helper'
 class TestForm < Test::Unit::TestCase
   def new_form(attribs = {})
     Collect::Form.new({
+      :name => 'foo',
+      :project => @project
     }.merge(attribs))
+  end
+
+  def setup
+    super
+    @project = Collect::Project.create(:name => 'foo', :database_adapter => 'sqlite')
   end
 
   test "sequel model" do
@@ -51,5 +58,15 @@ class TestForm < Test::Unit::TestCase
   test "many_to_one project" do
     form = new_form
     assert_respond_to form, :project
+  end
+
+  test "requires project_id" do
+    form = new_form(:project => nil)
+    assert !form.valid?
+  end
+
+  test "one_to_many sections" do
+    form = new_form
+    assert_respond_to form, :sections
   end
 end
