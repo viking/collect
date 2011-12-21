@@ -64,4 +64,9 @@ class TestProject < Test::Unit::TestCase
     project.destroy
     assert !File.exist?(path)
   end
+
+  test "one_to_many forms" do
+    project = new_project
+    assert_respond_to project, :forms
+  end
 end

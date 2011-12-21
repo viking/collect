@@ -1,6 +1,7 @@
 module Collect
   class Project < Sequel::Model
     plugin :serialization, :yaml, :database_options
+    one_to_many :forms
 
     def database(&block)
       opts = {:adapter => database_adapter}.merge(database_options || {})

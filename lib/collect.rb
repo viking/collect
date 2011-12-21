@@ -16,3 +16,4 @@ end
 
 path = Collect::Root + 'lib' + 'collect'
 require path + 'models'
+require path + 'utils'
