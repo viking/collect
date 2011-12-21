@@ -32,4 +32,9 @@ class TestSection < Test::Unit::TestCase
     section = new_section(:form => nil)
     assert !section.valid?
   end
+
+  test "one_to_many question" do
+    section = new_section
+    assert_respond_to section, :questions
+  end
 end
