@@ -9,5 +9,7 @@ group :development do
   gem "rcov", ">= 0"
   gem 'sqlite3'
   gem 'test-unit'
-  gem 'guard'
+  gem 'guard-test'
+  gem 'guard-bundler'
+  gem 'guard-shell'
 end
