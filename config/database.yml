@@ -1,3 +1,7 @@
 test:
   adapter: sqlite
-  database: <%= File.expand_path(File.dirname(__FILE__)) %>/../db/test.db
+  database: <%= Collect::Root %>/db/test.db
+
+development:
+  adapter: sqlite
+  database: <%= Collect::Root %>/db/development.db

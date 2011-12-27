@@ -1,5 +1,8 @@
 require 'sequel'
 require 'sequel/extensions/inflector'
+require 'sinatra/base'
+require 'omniauth'
+
 require 'erb'
 require 'pathname'
 require 'yaml'
@@ -19,3 +22,4 @@ path = Collect::Root + 'lib' + 'collect'
 require path + 'exceptions'
 require path + 'models'
 require path + 'utils'
+require path + 'application'
