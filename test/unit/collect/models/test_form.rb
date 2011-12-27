@@ -86,7 +86,7 @@ class TestForm < Test::Unit::TestCase
     end
   end
 
-  test "publish a published form" do
+  test "publishing an already published form" do
     form = new_form(:name => 'foo')
     assert form.save
 

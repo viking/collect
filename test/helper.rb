@@ -8,6 +8,7 @@ rescue Bundler::BundlerError => e
   exit e.status_code
 end
 require 'test/unit'
+require 'rack/test'
 require 'tempfile'
 
 ENV['RACK_ENV'] = 'test'
@@ -18,7 +19,7 @@ require 'collect'
 class Test::Unit::TestCase
   def run_with_transaction(*args, &block)
     run_without_transaction(*args, &block)
-    [Collect::Question, Collect::Section, Collect::Form, Collect::Project].each do |klass|
+    [Collect::Question, Collect::Section, Collect::Form, Collect::Project, Collect::Authentication, Collect::User].each do |klass|
       klass.dataset.destroy
     end
   end
