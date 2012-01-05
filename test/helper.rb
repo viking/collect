@@ -19,13 +19,11 @@ require 'collect'
 
 OmniAuth.config.test_mode = true
 
-class Test::Unit::TestCase
-  def run_with_transaction(*args, &block)
-    run_without_transaction(*args, &block)
+class CollectUnitTest < Test::Unit::TestCase
+  def run(*args, &block)
+    super
     [Collect::Question, Collect::Section, Collect::Form, Collect::Project, Collect::Authentication, Collect::User].each do |klass|
       klass.dataset.destroy
     end
   end
-  alias :run_without_transaction :run
-  alias :run :run_with_transaction
 end

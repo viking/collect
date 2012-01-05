@@ -1,6 +1,6 @@
 require 'helper'
 
-class TestForm < Test::Unit::TestCase
+class TestForm < CollectUnitTest
   def new_form(attribs = {})
     Collect::Form.new({
       :name => 'foo',

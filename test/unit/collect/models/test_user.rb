@@ -1,6 +1,6 @@
 require 'helper'
 
-class TestUser < Test::Unit::TestCase
+class TestUser < CollectUnitTest
   def new_user(attribs = {})
     Collect::User.new({
       :username => 'foo'

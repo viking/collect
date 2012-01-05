@@ -1,6 +1,6 @@
 require 'helper'
 
-class TestQuestion < Test::Unit::TestCase
+class TestQuestion < CollectUnitTest
   def new_question(attribs = {})
     Collect::Question.new({
       :name => 'foo',

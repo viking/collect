@@ -1,6 +1,6 @@
 require 'helper'
 
-class TestProject < Test::Unit::TestCase
+class TestProject < CollectUnitTest
   def new_project(attribs = {})
     Collect::Project.new({
       :name => 'Foo',

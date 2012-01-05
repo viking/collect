@@ -1,6 +1,6 @@
 require 'helper'
 
-class TestAuthentication < Test::Unit::TestCase
+class TestAuthentication < CollectUnitTest
   def new_authentication(attribs = {})
     Collect::Authentication.new({
       :user => @user,

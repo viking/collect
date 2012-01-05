@@ -1,6 +1,6 @@
 require 'helper'
 
-class TestSection < Test::Unit::TestCase
+class TestSection < CollectUnitTest
   def new_section(attribs = {})
     Collect::Section.new({
       :name => 'foo',
