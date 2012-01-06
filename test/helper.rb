@@ -27,3 +27,33 @@ class CollectUnitTest < Test::Unit::TestCase
     end
   end
 end
+
+class CollectRackTest < CollectUnitTest
+  include Rack::Test::Methods
+
+  def setup_session(data = {})
+    sid = SecureRandom.hex(32)
+    hsh = data.merge("session_id" => sid)
+    data = [Marshal.dump(hsh)].pack('m')
+    secret = app.session_secret
+    hmac = OpenSSL::HMAC.hexdigest(OpenSSL::Digest::SHA1.new, secret, data)
+    str = "#{data}--#{hmac}"
+    set_cookie("rack.session=#{URI.encode_www_form_component(str)}")
+  end
+end
+
+class CollectExtensionTest < CollectRackTest
+  def app
+    if !defined? @app
+      @app = Class.new(Sinatra::Base)
+      @app.enable :sessions
+    end
+    @app
+  end
+
+  def setup
+    super
+    klass = Collect::Extensions.const_get(self.class.name.sub(/^Test/, ""))
+    app.register(klass)
+  end
+end
