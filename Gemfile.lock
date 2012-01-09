@@ -17,6 +17,9 @@ GEM
       bundler (~> 1.0)
       git (>= 1.2.5)
       rake
+    metaclass (0.0.1)
+    mocha (0.10.0)
+      metaclass (~> 0.0.1)
     omniauth (1.0.1)
       hashie (~> 1.2)
       rack
@@ -46,6 +49,7 @@ DEPENDENCIES
   guard-shell
   guard-test
   jeweler (~> 1.6.4)
+  mocha
   omniauth
   rack-test
   rcov

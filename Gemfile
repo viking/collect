@@ -14,4 +14,5 @@ group :development do
   gem 'guard-test'
   gem 'guard-bundler'
   gem 'guard-shell'
+  gem 'mocha'
 end

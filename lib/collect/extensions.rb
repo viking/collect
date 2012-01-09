@@ -4,6 +4,6 @@ module Collect
 end
 
 path = Collect::Root + 'lib' + 'collect' + 'extensions'
-require path + 'authentications'
+require path + 'projects'
 
-Collect::Application.register(Collect::Extensions::Authentications)
+Collect::Application.register(Collect::Extensions::Projects)

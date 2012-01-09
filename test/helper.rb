@@ -48,6 +48,8 @@ class CollectExtensionTest < CollectRackTest
     if !defined? @app
       @app = Class.new(Sinatra::Base)
       @app.enable :sessions
+      @app.set :root, Collect::Root.to_s 
+      @app.class_eval("def current_user; @@current_user; end")
     end
     @app
   end
@@ -55,8 +57,7 @@ class CollectExtensionTest < CollectRackTest
   def setup
     super
     @current_user = stub('current user')
-    helpers_klass = Module.new { attr_reader(:current_user) }
-    helpers_klass.instance_variable_set(:@current_user, @current_user)
+    app.class_variable_set(:@@current_user, @current_user)
     extension_klass = Collect::Extensions.const_get(self.class.name.sub(/^Test/, ""))
     app.register(extension_klass)
   end
