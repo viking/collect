@@ -1,6 +1,8 @@
 module Collect
   class Project < Sequel::Model
     plugin :serialization, :yaml, :database_options
+    one_to_many :roles
+    many_to_many :users, :join_table => :roles
     one_to_many :forms
 
     def database(&block)

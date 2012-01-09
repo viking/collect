@@ -23,4 +23,18 @@ class TestUser < CollectUnitTest
     user_2 = new_user
     assert !user_2.valid?
   end
+
+  test "one_to_many roles" do
+    assert_respond_to Collect::User.new, :roles
+  end
+
+  test "many_to_many projects (through roles)" do
+    user = new_user
+    assert user.save
+
+    project = Collect::Project.create(:name => 'foo', :database_adapter => 'sqlite')
+    role = Collect::Role.create(:user => user, :project => project)
+
+    assert_equal [project], user.projects
+  end
 end

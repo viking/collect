@@ -11,6 +11,7 @@ require 'test/unit'
 require 'rack/test'
 require 'tempfile'
 require 'securerandom'
+require 'mocha'
 
 ENV['RACK_ENV'] = 'test'
 $LOAD_PATH.unshift(File.dirname(__FILE__))
@@ -22,7 +23,7 @@ OmniAuth.config.test_mode = true
 class CollectUnitTest < Test::Unit::TestCase
   def run(*args, &block)
     super
-    [Collect::Question, Collect::Section, Collect::Form, Collect::Project, Collect::Authentication, Collect::User].each do |klass|
+    [Collect::Question, Collect::Section, Collect::Form, Collect::Role, Collect::Project, Collect::Authentication, Collect::User].each do |klass|
       klass.dataset.destroy
     end
   end
@@ -53,7 +54,10 @@ class CollectExtensionTest < CollectRackTest
 
   def setup
     super
-    klass = Collect::Extensions.const_get(self.class.name.sub(/^Test/, ""))
-    app.register(klass)
+    @current_user = stub('current user')
+    helpers_klass = Module.new { attr_reader(:current_user) }
+    helpers_klass.instance_variable_set(:@current_user, @current_user)
+    extension_klass = Collect::Extensions.const_get(self.class.name.sub(/^Test/, ""))
+    app.register(extension_klass)
   end
 end

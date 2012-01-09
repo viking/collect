@@ -69,4 +69,17 @@ class TestProject < CollectUnitTest
     project = new_project
     assert_respond_to project, :forms
   end
+
+  test "one_to_many roles" do
+    assert_respond_to Collect::Project.new, :roles
+  end
+
+  test "many_to_many users (through roles)" do
+    user = Collect::User.create(:username => 'foo')
+    project = new_project
+    assert project.save
+    role = Collect::Role.create(:user => user, :project => project)
+
+    assert_equal [user], project.users
+  end
 end
