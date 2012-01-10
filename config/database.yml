@@ -5,3 +5,4 @@ test:
 development:
   adapter: sqlite
   database: <%= Collect::Root %>/db/development.db
+  logger: _stderr_

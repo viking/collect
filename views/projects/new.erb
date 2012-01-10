@@ -10,8 +10,14 @@
 
 <form action="/projects" method="post">
   <p>
-    <label for="project_name">Name:</label>
+    <label for="project_name">Name:</label><br/>
     <input id="project_name" type="text" name="project[name]" value="<%= @project.name %>" />
+  </p>
+  <p>
+    <label for="project_database_adapter">Adapter:</label><br/>
+    <select id="project_database_adapter" name="project[database_adapter]">
+      <option value="sqlite">SQLite</option>
+    </select>
   </p>
   <p>
     <input type="submit" value="Create" />

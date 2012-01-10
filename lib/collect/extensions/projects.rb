@@ -15,6 +15,7 @@ module Collect
         app.post '/projects' do
           @project = Project.new(params['project'])
           if @project.save
+            Role.create(:user_id => current_user.id, :project_id => @project.id, :is_admin => true)
             redirect "/projects/#{@project.id}"
           end
           erb :'projects/new'

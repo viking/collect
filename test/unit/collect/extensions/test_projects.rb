@@ -17,6 +17,7 @@ class TestProjects < CollectExtensionTest
     Collect::Project.expects(:new).with('name' => 'foo').returns(project)
     project.expects(:save).returns(true)
     project.stubs(:id).returns(1)
+    Collect::Role.expects(:create).with(:user_id => 1, :project_id => 1, :is_admin => true)
 
     post '/projects', {'project' => {'name' => 'foo'}}
     assert_equal 302, last_response.status

@@ -24,14 +24,16 @@ module Collect
       end
     end
 
-    get '/auth/:provider/callback' do
-      oa = request.env['omniauth.auth']
-      auth = Authentication[:uid => oa[:uid], :provider => oa[:provider]]
-      if auth
-        session[:user_id] = auth.user_id
-        redirect '/'
-      else
-        redirect '/auth/' + params[:provider]
+    %w{get post}.each do |method|
+      send(method, '/auth/:provider/callback') do
+        oa = request.env['omniauth.auth']
+        auth = Authentication[:uid => oa[:uid], :provider => oa[:provider]]
+        if auth
+          session[:user_id] = auth.user_id
+          redirect '/'
+        else
+          redirect '/auth/' + params[:provider]
+        end
       end
     end
 
