@@ -1,0 +1,15 @@
+<h1>Your Projects</h1>
+
+<% if @projects.length == 0 %>
+  <p>You currently don't have any projects.</p>
+<% else %>
+<ul>
+  <% @projects.each do |project| %>
+    <li><a href="/projects/<%= project.id %>"><%= project.name %></a></li>
+  <% end %>
+</ul>
+<% end %>
+
+<p>
+  <a href="/projects/new">Create project</a>
+</p>

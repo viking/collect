@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Collect</title>
+</head>
+<body>
+<% if current_user %>
+  <p>Logged in as: <%= current_user.username %></p>
+<% end %>
+<%= yield %>
+</body>
+</html>

@@ -56,7 +56,7 @@ class CollectExtensionTest < CollectRackTest
 
   def setup
     super
-    @current_user = stub('current user')
+    @current_user = stub('current user', :username => 'collect_user', :id => 1)
     app.class_variable_set(:@@current_user, @current_user)
     extension_klass = Collect::Extensions.const_get(self.class.name.sub(/^Test/, ""))
     app.register(extension_klass)
