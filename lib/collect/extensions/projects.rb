@@ -2,19 +2,27 @@ module Collect
   module Extensions
     module Projects
       def self.registered(app)
+        app.before %r{^(/admin)?/projects/(\d+)} do |admin, project_id|
+          dataset = Role.filter(:project_id => project_id, :user_id => current_user.id)
+          if admin
+            dataset = dataset.filter(:is_admin => true)
+          end
+          @role = dataset.first
+
+          if @role
+            @project = @role.project
+          else
+            halt 403
+          end
+        end
+
         app.get '/projects' do
           @roles = current_user.roles
           erb :'projects/index'
         end
 
         app.get '/projects/:id' do
-          @role = Role[:project_id => params['id'], :user_id => current_user.id]
-          if @role
-            @project = @role.project
-            erb :'projects/show'
-          else
-            halt 403
-          end
+          erb :'projects/show'
         end
 
         app.get '/admin/projects/new' do
@@ -32,13 +40,8 @@ module Collect
         end
 
         app.get '/admin/projects/:id' do
-          @role = Role[:project_id => params['id'], :user_id => current_user.id, :is_admin => true]
-          if @role
-            @project = @role.project
-            erb :'projects/admin_show'
-          else
-            halt 403
-          end
+          @forms = @project.forms
+          erb :'projects/admin_show'
         end
       end
     end

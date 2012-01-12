@@ -44,16 +44,23 @@ class TestProjects < CollectExtensionTest
   end
 
   test "admin project page with no forms" do
-    project = stub('project', :name => 'foo', :forms => [])
+    project = stub('project', :name => 'foo')
     role = stub('role', :project => project, :is_admin => true)
-    Collect::Role.expects(:[]).with(:project_id => '1', :user_id => 1, :is_admin => true).returns(role)
+    Collect::Role.expects(:filter).with(:project_id => '1', :user_id => 1).returns(mock {
+      expects(:filter).with(:is_admin => true).returns(self)
+      expects(:first).returns(role)
+    })
+    project.expects(:forms).returns([])
 
     get '/admin/projects/1'
     assert_equal 200, last_response.status
   end
 
   test "admin project page for unauthorized user" do
-    Collect::Role.expects(:[]).with(:project_id => '1', :user_id => 1, :is_admin => true).returns(nil)
+    Collect::Role.expects(:filter).with(:project_id => '1', :user_id => 1).returns(mock {
+      expects(:filter).with(:is_admin => true).returns(self)
+      expects(:first).returns(nil)
+    })
 
     get '/admin/projects/1'
     assert_equal 403, last_response.status
@@ -62,16 +69,58 @@ class TestProjects < CollectExtensionTest
   test "project page with no forms" do
     project = stub('project', :name => 'foo', :forms => [])
     role = stub('role', :project => project, :is_admin => false)
-    Collect::Role.expects(:[]).with(:project_id => '1', :user_id => 1).returns(role)
+    Collect::Role.expects(:filter).with(:project_id => '1', :user_id => 1).returns(mock {
+      expects(:first).returns(role)
+    })
 
     get '/projects/1'
     assert_equal 200, last_response.status
   end
 
   test "project page for unauthorized user" do
-    Collect::Role.expects(:[]).with(:project_id => '1', :user_id => 1).returns(nil)
+    Collect::Role.expects(:filter).with(:project_id => '1', :user_id => 1).returns(mock {
+      expects(:first).returns(nil)
+    })
 
     get '/projects/1'
+    assert_equal 403, last_response.status
+  end
+
+  test "automatically check role for non-admin sub-pages" do
+    project = stub('project', :foo => 'bar')
+    role = stub('role', :project => project, :is_admin => false, :foo => 'baz')
+    Collect::Role.expects(:filter).with(:project_id => '1', :user_id => 1).returns(mock {
+      expects(:first).returns(role)
+    })
+
+    app.get('/projects/1/foo/bar') { @project.foo + @role.foo }
+    get '/projects/1/foo/bar'
+    assert_equal "barbaz", last_response.body
+
+    Collect::Role.expects(:filter).with(:project_id => '1', :user_id => 1).returns(mock {
+      expects(:first).returns(nil)
+    })
+    get '/projects/1/foo/bar'
+    assert_equal 403, last_response.status
+  end
+
+  test "automatically check role for admin sub-pages" do
+    project = stub('project', :foo => 'bar')
+    role = stub('role', :project => project, :is_admin => false, :foo => 'baz')
+    Collect::Role.expects(:filter).with(:project_id => '1', :user_id => 1).returns(mock {
+      expects(:filter).with(:is_admin => true).returns(self)
+      expects(:first).returns(role)
+    })
+
+    app.get('/admin/projects/1/foo/bar') { @project.foo + @role.foo }
+    get '/admin/projects/1/foo/bar'
+    assert_equal "barbaz", last_response.body
+
+    Collect::Role.expects(:filter).with(:project_id => '1', :user_id => 1).returns(mock {
+      expects(:filter).with(:is_admin => true).returns(self)
+      expects(:first).returns(nil)
+    })
+    get '/admin/projects/1/foo/bar'
     assert_equal 403, last_response.status
   end
 end
