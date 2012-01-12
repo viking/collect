@@ -44,13 +44,28 @@ class TestProjects < CollectExtensionTest
   end
 
   test "admin project page with no forms" do
-    project = stub('project', :name => 'foo')
+    project = stub('project', :id => 1, :name => 'foo')
     role = stub('role', :project => project, :is_admin => true)
     Collect::Role.expects(:filter).with(:project_id => '1', :user_id => 1).returns(mock {
       expects(:filter).with(:is_admin => true).returns(self)
       expects(:first).returns(role)
     })
     project.expects(:forms).returns([])
+
+    get '/admin/projects/1'
+    assert_equal 200, last_response.status
+  end
+
+  test "admin project page with some forms" do
+    project = stub('project', :id => 1, :name => 'foo')
+    role = stub('role', :project => project, :is_admin => true)
+    Collect::Role.expects(:filter).with(:project_id => '1', :user_id => 1).returns(mock {
+      expects(:filter).with(:is_admin => true).returns(self)
+      expects(:first).returns(role)
+    })
+    form_1 = stub('form 1', :id => 1, :name => 'Demographics', :status => nil, :primary => true, :repeatable => false)
+    form_2 = stub('form 2', :id => 2, :name => 'Visit', :status => nil, :primary => false, :repeatable => true)
+    project.expects(:forms).returns([form_1, form_2])
 
     get '/admin/projects/1'
     assert_equal 200, last_response.status
