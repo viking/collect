@@ -10,8 +10,8 @@ class TestSection < CollectUnitTest
 
   def setup
     super
-    @project = Collect::Project.create(:name => 'foo', :database_adapter => 'sqlite')
-    @form = Collect::Form.create(:name => 'foo', :project => @project)
+    @project = Collect::Project.create!(:name => 'foo', :database_adapter => 'sqlite')
+    @form = Collect::Form.create!(:name => 'foo', :project => @project)
   end
 
   test "sequel model" do

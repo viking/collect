@@ -20,6 +20,15 @@ require 'collect'
 
 OmniAuth.config.test_mode = true
 
+module CreateBangPlugin
+  module ClassMethods
+    def create!(values = {}, &block)
+      new(values, &block).save(:raise_on_failure => true)
+    end
+  end
+end
+Sequel::Model.plugin(CreateBangPlugin)
+
 class CollectUnitTest < Test::Unit::TestCase
   def run(*args, &block)
     super

@@ -10,7 +10,7 @@ class TestForm < CollectUnitTest
 
   def setup
     super
-    @project = Collect::Project.create(:name => 'foo', :database_adapter => 'sqlite')
+    @project = Collect::Project.create!(:name => 'foo', :database_adapter => 'sqlite')
   end
 
   test "sequel model" do
@@ -74,8 +74,8 @@ class TestForm < CollectUnitTest
     form = new_form(:name => 'foo')
     assert form.save
 
-    section = Collect::Section.create(:name => 'foo', :form => form)
-    question = Collect::Question.create(:name => 'foo', :prompt => 'Foo?', :type => 'String', :section => section)
+    section = Collect::Section.create!(:name => 'foo', :form => form)
+    question = Collect::Question.create!(:name => 'foo', :prompt => 'Foo?', :type => 'String', :section => section)
 
     form.publish!
     assert_equal 'published', form.status
@@ -90,8 +90,8 @@ class TestForm < CollectUnitTest
     form = new_form(:name => 'foo')
     assert form.save
 
-    section = Collect::Section.create(:name => 'foo', :form => form)
-    question = Collect::Question.create(:name => 'foo', :prompt => 'Foo?', :type => 'String', :section => section)
+    section = Collect::Section.create!(:name => 'foo', :form => form)
+    question = Collect::Question.create!(:name => 'foo', :prompt => 'Foo?', :type => 'String', :section => section)
 
     form.publish!
     assert_raises(Collect::FormAlreadyPublishedException) { form.publish! }

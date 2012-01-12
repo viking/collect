@@ -16,15 +16,15 @@ class TestApplication < CollectRackTest
   end
 
   test "shows root after login" do
-    user = Collect::User.create(:username => 'foo')
+    user = Collect::User.create!(:username => 'foo')
     setup_session(:user_id => user.id)
     get '/'
     assert_equal 200, last_response.status
   end
 
   test "authenticating existing user" do
-    user = Collect::User.create(:username => 'foo')
-    authentication = Collect::Authentication.create(:uid => 'foo', :provider => 'developer', :user => user)
+    user = Collect::User.create!(:username => 'foo')
+    authentication = Collect::Authentication.create!(:uid => 'foo', :provider => 'developer', :user => user)
 
     OmniAuth.config.mock_auth[:developer] = { :provider => 'developer', :uid => 'foo' }
     get '/auth/developer'

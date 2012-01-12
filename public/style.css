@@ -1,0 +1,10 @@
+body {
+  background: #999;
+}
+
+.content {
+  background: white;
+  margin-top: 1em;
+  padding: 0.5em 1em;
+  font-size: 13pt;
+}

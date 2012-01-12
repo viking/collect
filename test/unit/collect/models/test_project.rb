@@ -75,10 +75,10 @@ class TestProject < CollectUnitTest
   end
 
   test "many_to_many users (through roles)" do
-    user = Collect::User.create(:username => 'foo')
+    user = Collect::User.create!(:username => 'foo')
     project = new_project
     assert project.save
-    role = Collect::Role.create(:user => user, :project => project)
+    role = Collect::Role.create!(:user => user, :project => project)
 
     assert_equal [user], project.users
   end

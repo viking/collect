@@ -2,11 +2,21 @@
 <html>
 <head>
   <title>Collect</title>
+  <link rel="stylesheet" type="text/css" media="all" href="/reset.css" />
+  <link rel="stylesheet" type="text/css" media="all" href="/text.css" />
+  <link rel="stylesheet" type="text/css" media="all" href="/960.css" />
+  <link rel="stylesheet" type="text/css" media="all" href="/style.css" />
 </head>
 <body>
-<% if current_user %>
-  <p>Logged in as: <%= current_user.username %></p>
-<% end %>
-<%= yield %>
+  <div class="container_16">
+    <div class="grid_16">
+      <div class="content">
+        <p>Logged in as: <%= current_user.username %></p>
+
+        <%= yield %>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
 </body>
 </html>

@@ -15,4 +15,5 @@ group :development do
   gem 'guard-bundler'
   gem 'guard-shell'
   gem 'mocha'
+  gem 'sinatra-contrib'
 end

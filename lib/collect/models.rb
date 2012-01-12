@@ -1,5 +1,6 @@
 # Some model-wide configuration
 Sequel::Model.plugin :validation_helpers
+Sequel::Model.raise_on_save_failure = false
 
 path = Collect::Root + 'lib' + 'collect' + 'models'
 require path + 'user'

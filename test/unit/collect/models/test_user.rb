@@ -32,8 +32,8 @@ class TestUser < CollectUnitTest
     user = new_user
     assert user.save
 
-    project = Collect::Project.create(:name => 'foo', :database_adapter => 'sqlite')
-    role = Collect::Role.create(:user => user, :project => project)
+    project = Collect::Project.create!(:name => 'foo', :database_adapter => 'sqlite')
+    role = Collect::Role.create!(:user => user, :project => project)
 
     assert_equal [project], user.projects
   end

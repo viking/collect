@@ -12,9 +12,9 @@ class TestQuestion < CollectUnitTest
 
   def setup
     super
-    @project = Collect::Project.create(:name => 'foo', :database_adapter => 'sqlite')
-    @form = Collect::Form.create(:name => 'foo', :project => @project)
-    @section = Collect::Section.create(:name => 'foo', :form => @form)
+    @project = Collect::Project.create!(:name => 'foo', :database_adapter => 'sqlite')
+    @form = Collect::Form.create!(:name => 'foo', :project => @project)
+    @section = Collect::Section.create!(:name => 'foo', :form => @form)
   end
 
   test "sequel model" do
@@ -41,11 +41,11 @@ class TestQuestion < CollectUnitTest
   end
 
   test "requires unique name over form" do
-    section_1 = Collect::Section.create(:name => 'section 1', :form => @form)
+    section_1 = Collect::Section.create!(:name => 'section 1', :form => @form)
     question_1 = new_question(:name => 'foo', :section => section_1)
     assert question_1.save
 
-    section_2 = Collect::Section.create(:name => 'section 2', :form => @form)
+    section_2 = Collect::Section.create!(:name => 'section 2', :form => @form)
     question_2 = new_question(:name => 'foo', :section => section_2)
     assert !question_2.valid?
 

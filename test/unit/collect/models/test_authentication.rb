@@ -11,7 +11,7 @@ class TestAuthentication < CollectUnitTest
 
   def setup
     super
-    @user = Collect::User.create(:username => 'foo')
+    @user = Collect::User.create!(:username => 'foo')
   end
 
   test "sequel model" do
