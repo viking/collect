@@ -1,13 +1,13 @@
-source "http://rubygems.org"
+source 'http://rubygems.org'
 
 gem 'sinatra', :require => 'sinatra/base'
 gem 'sequel'
 gem 'omniauth'
 
 group :development do
-  gem "bundler", "~> 1.0.0"
-  gem "jeweler", "~> 1.6.4"
-  gem "rcov", ">= 0"
+  gem 'bundler'
+  gem 'jeweler'
+  gem 'simplecov'
   gem 'sqlite3'
   gem 'test-unit'
   gem 'rack-test'
