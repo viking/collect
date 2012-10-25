@@ -56,8 +56,14 @@ class CollectExtensionTest < CollectRackTest
   def app
     if !defined? @app
       @app = Class.new(Sinatra::Base)
+      @app.register Mustache::Sinatra
       @app.enable :sessions
-      @app.set :root, Collect::Root.to_s 
+      @app.set :root, Collect::Root.to_s
+      @app.set(:mustache, {
+        :templates => (Collect::Root + 'templates').to_s,
+        :views => (Collect::Root + 'lib' + 'collect' + 'views').to_s,
+        :namespace => Collect
+      })
       @app.class_eval("def current_user; @@current_user; end")
     end
     @app

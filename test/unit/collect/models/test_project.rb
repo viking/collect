@@ -45,11 +45,8 @@ class TestProject < CollectUnitTest
     project = new_project
     assert project.save
     project.database do |db|
-      # NOTE: there should be an additional slash in the URI, but
-      # Sequel doesn't put it there when using Sequel.connect with
-      # an option hash
-
-      assert_equal "sqlite:/#{Collect::Root}/db/projects/test/#{project.id}", db.uri
+      assert_equal 'sqlite', db.opts[:adapter]
+      assert_equal "#{Collect::Root}/db/projects/test/#{project.id}", db.opts[:database]
     end
   end
 

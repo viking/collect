@@ -37,7 +37,7 @@ class TestProjects < CollectExtensionTest
     project = stub('new project', :name => 'foo')
     Collect::Project.expects(:new).with('name' => 'foo').returns(project)
     project.expects(:save).returns(false)
-    project.expects(:errors).returns(stub(:empty? => false, :full_messages => ['foo']))
+    project.expects(:errors).at_least_once.returns(stub(:empty? => false, :full_messages => ['foo']))
 
     post '/admin/projects', {'project' => {'name' => 'foo'}}
     assert_equal 200, last_response.status
