@@ -18,16 +18,16 @@ module Collect
 
         app.get '/projects' do
           @roles = current_user.roles
-          erb :'projects/index'
+          mustache :'projects/index'
         end
 
         app.get '/projects/:id' do
-          erb :'projects/show'
+          mustache :'projects/show'
         end
 
         app.get '/admin/projects/new' do
           @project = Project.new
-          erb :'projects/admin_new'
+          mustache :'admin/projects/new'
         end
 
         app.post '/admin/projects' do
@@ -36,14 +36,15 @@ module Collect
             Role.create(:user_id => current_user.id, :project_id => @project.id, :is_admin => true)
             redirect "/admin/projects/#{@project.id}"
           end
-          erb :'projects/admin_new'
+          mustache :'admin/projects/new'
         end
 
         app.get '/admin/projects/:id' do
           @forms = @project.forms
-          erb :'projects/admin_show'
+          mustache :'admin/projects/show'
         end
       end
     end
+    Application.register(Projects)
   end
 end

@@ -1,0 +1,39 @@
+<h1>New form</h1>
+
+{{#errors}}
+  <ul class="errors">
+    {{#full_messages}}
+      <li>{{.}}</li>
+    {{/full_messages}}
+  </ul>
+{{/errors}}
+
+<form action="/admin/projects/{{project_id}}/forms" method="post">
+  <p>
+    <label for="form_name">Name:</label><br/>
+    <input id="form_name" type="text" name="form[name]" value="{{name}}" />
+  </p>
+  <div class="sections">
+    {{#sections}}
+      <div class="section">
+        <h2>Section: {{name}}</h2>
+        <p>
+          <label for="form_section_{{position}}_name">Name:</label><br/>
+          <input id="form_section_{{position}}_name" type="text" name="form[sections_attributes][{{section_index}}][name]" value="{{name}}" />
+        </p>
+        <p>
+          <a href="#" onclick="addQuestion({{position}}); return false;">Add question</a>
+        </p>
+      </div>
+    {{/sections}}
+  </div>
+  <p>
+    <input type="submit" value="Create" />
+  </p>
+</form>
+
+<script type="text/javascript">
+  function addQuestion(sectionIndex) {
+
+  }
+</script>

@@ -1,7 +1,15 @@
 module Collect
   class Application < Sinatra::Base
+    register Mustache::Sinatra
+
     enable :sessions
     set :root, Collect::Root.to_s
+    set :mustache, {
+      :templates => (Collect::Root + 'templates').to_s,
+      :views => (Collect::Root + 'lib' + 'collect' + 'views').to_s,
+      :namespace => Collect
+    }
+    enable :reload_templates if development?
 
     if !settings.respond_to?(:provider)
       if production?
@@ -12,8 +20,9 @@ module Collect
       end
     end
 
-    before %r{^(?!/auth)} do
+    before %r{^(?!(?:/auth|/favicon\.ico))} do
       if current_user.nil?
+        session[:return_to] ||= request.fullpath
         redirect "/auth/#{settings.provider}"
       end
     end
@@ -30,7 +39,12 @@ module Collect
         auth = Authentication[:uid => oa[:uid], :provider => oa[:provider]]
         if auth
           session[:user_id] = auth.user_id
-          redirect '/'
+          if session[:return_to]
+            return_to = session.delete(:return_to)
+            redirect return_to
+          else
+            redirect '/'
+          end
         else
           redirect '/auth/' + params[:provider]
         end
@@ -38,7 +52,7 @@ module Collect
     end
 
     get '/' do
-      erb :index
+      mustache :index
     end
   end
 end

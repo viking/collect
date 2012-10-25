@@ -96,4 +96,11 @@ class TestForm < CollectUnitTest
     form.publish!
     assert_raises(Collect::FormAlreadyPublishedException) { form.publish! }
   end
+
+  test "accepts nested attributes for sections" do
+    form = new_form({:sections_attributes => [
+      {:name => 'foo', :position => 0}
+    ]})
+    assert_equal 1, form.sections.length
+  end
 end

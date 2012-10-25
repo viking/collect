@@ -3,6 +3,9 @@ module Collect
     many_to_one :project
     one_to_many :sections
 
+    plugin :nested_attributes
+    nested_attributes :sections
+
     def publish!
       if status == 'published'
         raise FormAlreadyPublishedException

@@ -1,17 +1,17 @@
 <h1>New project</h1>
 
-<% if !(errors = @project.errors).empty? %>
+{{#has_errors?}}
   <ul class="errors">
-    <% errors.full_messages.each do |message| %>
-      <li><%= message %></li>
-    <% end %>
+    {{#errors}}
+      <li>{{.}}</li>
+    {{/errors}}
   </ul>
-<% end %>
+{{/has_errors?}}
 
 <form action="/admin/projects" method="post">
   <p>
     <label for="project_name">Name:</label><br/>
-    <input id="project_name" type="text" name="project[name]" value="<%= @project.name %>" />
+    <input id="project_name" type="text" name="project[name]" value="{{project.name}}" />
   </p>
   <p>
     <label for="project_database_adapter">Adapter:</label><br/>

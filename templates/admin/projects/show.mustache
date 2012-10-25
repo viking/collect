@@ -1,0 +1,14 @@
+<h1>{{project.name}}</h1>
+
+<ul>
+{{^forms}}
+  <li>There are currently no forms for this projects.</li>
+{{/forms}}
+{{#forms}}
+  <li><a href="/admin/projects/{{project_id}}/forms/{{id}}">{{name}}</a></li>
+{{/forms}}
+</ul>
+
+<p>
+  <a href="/admin/projects/{{project.id}}/forms/new">Create form</a>
+</p>

@@ -3,6 +3,7 @@ source 'http://rubygems.org'
 gem 'sinatra', :require => 'sinatra/base'
 gem 'sequel'
 gem 'omniauth'
+gem 'mustache'
 
 group :development do
   gem 'bundler'
@@ -16,4 +17,7 @@ group :development do
   gem 'guard-shell'
   gem 'mocha'
   gem 'sinatra-contrib'
+  gem 'rb-inotify'
+  gem 'debugger'
+  gem 'thin'
 end

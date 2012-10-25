@@ -37,4 +37,11 @@ class TestSection < CollectUnitTest
     section = new_section
     assert_respond_to section, :questions
   end
+
+  test "accepts nested attributes for questions" do
+    section = new_section({:questions_attributes => [
+      {:name => 'foo', :prompt => 'foo?', :type => 'string'}
+    ]})
+    assert_equal 1, section.questions.length
+  end
 end

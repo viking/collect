@@ -1,0 +1,19 @@
+<h1>Your Projects</h1>
+
+<ul>
+{{^roles}}
+  <li>You currently don't have any projects.</li>
+{{/roles}}
+{{#roles}}
+  <li>
+    <a href="/projects/{{project.id}}">{{project.name}}</a>
+    {{#is_admin}}
+      [ <a href="/admin/projects/{{project.id}}">admin</a> ]
+    {{/is_admin}}
+  </li>
+{{/roles}}
+</ul>
+
+<p>
+  <a href="/admin/projects/new">Create project</a>
+</p>

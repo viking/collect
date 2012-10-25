@@ -12,8 +12,11 @@ class TestForms < CollectExtensionTest
   end
 
   test "new form" do
-    form = stub('form')
-    Collect::Form.expects(:new).returns(form)
+    section = stub('section', :name => 'main', :position => 0, :questions => [])
+    form = stub('form', :name => nil, :errors => [], :sections => [section])
+    Collect::Form.expects(:new).with(:project => @project).returns(form)
+    form.expects(:sections_attributes=).with([{:name => 'main', :position => 0}])
+
     get '/admin/projects/1/forms/new'
     assert_equal 200, last_response.status
   end
