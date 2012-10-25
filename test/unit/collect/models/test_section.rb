@@ -28,11 +28,6 @@ class TestSection < CollectUnitTest
     assert_respond_to section, :form
   end
 
-  test "requires form_id" do
-    section = new_section(:form => nil)
-    assert !section.valid?
-  end
-
   test "one_to_many question" do
     section = new_section
     assert_respond_to section, :questions

@@ -5,7 +5,10 @@
   <li>There are currently no forms for this projects.</li>
 {{/forms}}
 {{#forms}}
-  <li><a href="/admin/projects/{{project_id}}/forms/{{id}}">{{name}}</a></li>
+  <li>
+    <a href="/admin/projects/{{project_id}}/forms/{{id}}">{{name}}</a>
+    [ <a href="/admin/projects/{{project_id}}/forms/{{id}}/edit">edit</a> ]
+  </li>
 {{/forms}}
 </ul>
 

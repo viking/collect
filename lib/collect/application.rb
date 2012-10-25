@@ -37,6 +37,12 @@ module Collect
       send(method, '/auth/:provider/callback') do
         oa = request.env['omniauth.auth']
         auth = Authentication[:uid => oa[:uid], :provider => oa[:provider]]
+
+        if auth.nil? && Application.development?
+          user = User.create(:username => oa[:info][:name], :email => oa[:info][:email])
+          auth = Authentication.create(:user => user, :uid => oa[:uid], :provider => oa[:provider])
+        end
+
         if auth
           session[:user_id] = auth.user_id
           if session[:return_to]
@@ -53,6 +59,9 @@ module Collect
 
     get '/' do
       mustache :index
+    end
+
+    get '/signup' do
     end
   end
 end

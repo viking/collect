@@ -96,6 +96,7 @@ DEPENDENCIES
   guard-shell
   guard-test
   jeweler
+  json
   mocha
   mustache
   omniauth

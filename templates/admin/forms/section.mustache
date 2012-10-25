@@ -1,0 +1,17 @@
+<div id="section-{{section_index}}" class="section">
+  <h2>
+    <label for="form_section_{{section_index}}_name">Section:</label>
+    <input id="form_section_{{section_index}}_name" type="text" name="form[sections_attributes][{{section_index}}][name]" value="{{section.name}}" />
+  </h2>
+  <div class="questions">
+    {{#questions}}
+      {{> admin/forms/question}}
+    {{/questions}}
+  </div>
+  <div style="display: none;">
+    <input type="hidden" name="form[sections_attributes][{{section_index}}][position]" value="{{section.position}}" />
+  </div>
+  <p>
+    <a href="#" onclick="add_question({{section_index}}); return false;">Add question</a>
+  </p>
+</div>

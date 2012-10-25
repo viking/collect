@@ -8,7 +8,7 @@ module Collect
 
     def validate
       super
-      validates_presence [:name, :form_id]
+      validates_presence [:name]
     end
   end
 end

@@ -4,6 +4,7 @@ gem 'sinatra', :require => 'sinatra/base'
 gem 'sequel'
 gem 'omniauth'
 gem 'mustache'
+gem 'json'
 
 group :development do
   gem 'bundler'

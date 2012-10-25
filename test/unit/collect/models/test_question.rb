@@ -35,11 +35,6 @@ class TestQuestion < CollectUnitTest
     assert !question.valid?
   end
 
-  test "requires section_id" do
-    question = new_question(:section => nil)
-    assert !question.valid?
-  end
-
   test "requires unique name over form" do
     section_1 = Collect::Section.create!(:name => 'section 1', :form => @form)
     question_1 = new_question(:name => 'foo', :section => section_1)

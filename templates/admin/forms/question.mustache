@@ -1,0 +1,21 @@
+<div class="question">
+  <p>
+    <label for="form_section_{{section_index}}_question_{{question_index}}_name">Name:</label><br/>
+    <input id="form_section_{{section_index}}_question_{{question_index}}_name" type="text" name="form[sections_attributes][{{section_index}}][questions_attributes][{{question_index}}][name]" value="{{question.name}}" />
+  </p>
+  <p>
+    <label for="form_section_{{section_index}}_question_{{question_index}}_prompt">Prompt:</label><br/>
+    <input id="form_section_{{section_index}}_question_{{question_index}}_prompt" type="text" name="form[sections_attributes][{{section_index}}][questions_attributes][{{question_index}}][prompt]" value="{{question.prompt}}" />
+  </p>
+  <p>
+    <label for="form_section_{{section_index}}_question_{{question_index}}_type">Type:</label><br/>
+    <select id="form_section_{{section_index}}_question_{{question_index}}_type" type="text" name="form[sections_attributes][{{section_index}}][questions_attributes][{{question_index}}][type]" value="{{question.type}}">
+      {{#question_types}}
+        <option>{{.}}</option>
+      {{/question_types}}
+    </select>
+  </p>
+  <div style="display: none;">
+    <input type="hidden" name="form[sections_attributes][{{section_index}}][questions_attributes][{{question_index}}][position]" value="{{question.position}}" />
+  </div>
+</div>

@@ -5,11 +5,11 @@ module Collect
 
     def validate
       super
-      validates_presence [:name, :prompt, :type, :section_id]
+      validates_presence [:name, :prompt, :type]
       validates_format /^[a-zA-Z0-9_]+$/, :name
       validates_includes TYPES, :type
 
-      if errors.on(:section_id).nil? && errors.on(:name).nil?
+      if errors.on(:name).nil? && section_id && section.form_id
         # Check name uniqueness across form
         ds = self.class.dataset.
           select(:questions__name).

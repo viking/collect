@@ -3,6 +3,7 @@ require 'sequel/extensions/inflector'
 require 'sinatra/base'
 require 'omniauth'
 require 'mustache/sinatra'
+require 'json'
 
 require 'erb'
 require 'pathname'

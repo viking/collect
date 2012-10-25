@@ -1,30 +1,21 @@
 <h1>New form</h1>
 
-{{#errors}}
+{{#has_errors?}}
   <ul class="errors">
-    {{#full_messages}}
+    {{#errors}}
       <li>{{.}}</li>
-    {{/full_messages}}
+    {{/errors}}
   </ul>
-{{/errors}}
+{{/has_errors?}}
 
-<form action="/admin/projects/{{project_id}}/forms" method="post">
+<form action="/admin/projects/{{form.project_id}}/forms" method="post">
   <p>
     <label for="form_name">Name:</label><br/>
-    <input id="form_name" type="text" name="form[name]" value="{{name}}" />
+    <input id="form_name" type="text" name="form[name]" value="{{form.name}}" />
   </p>
   <div class="sections">
     {{#sections}}
-      <div class="section">
-        <h2>Section: {{name}}</h2>
-        <p>
-          <label for="form_section_{{position}}_name">Name:</label><br/>
-          <input id="form_section_{{position}}_name" type="text" name="form[sections_attributes][{{section_index}}][name]" value="{{name}}" />
-        </p>
-        <p>
-          <a href="#" onclick="addQuestion({{position}}); return false;">Add question</a>
-        </p>
-      </div>
+      {{> admin/forms/section}}
     {{/sections}}
   </div>
   <p>
@@ -32,8 +23,26 @@
   </p>
 </form>
 
-<script type="text/javascript">
-  function addQuestion(sectionIndex) {
+<script id="section-template" type="text/template">
+{{{section_template}}}
+</script>
 
+<script id="question-template" type="text/template">
+{{{question_template}}}
+</script>
+
+<script type="text/javascript">
+  var question_types = {{{question_types_json}}};
+  function add_question(section_index) {
+    var container = $('#section-'+section_index+' .questions');
+    var question_index = container.children('.question').length + 1;
+    var view = {
+      section_index: section_index,
+      question: {position: question_index},
+      question_index: question_index,
+      question_types: question_types
+    };
+    var html = $('#question-template').mustache(view, {});
+    container.append(html);
   }
 </script>
