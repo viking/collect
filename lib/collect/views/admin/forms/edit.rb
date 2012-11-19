@@ -8,6 +8,10 @@ module Collect
           def action_url
             "/admin/projects/#{form.project_id}/forms/#{form.id}"
           end
+
+          def submit_label
+            "Save"
+          end
         end
       end
     end

@@ -8,6 +8,10 @@ module Collect
           def action_url
             "/admin/projects/#{@project.id}/forms"
           end
+
+          def submit_label
+            "Create"
+          end
         end
       end
     end
