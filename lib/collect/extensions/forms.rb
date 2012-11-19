@@ -15,6 +15,10 @@ module Collect
           mustache :'admin/forms/new'
         end
 
+        app.get '/admin/projects/:project_id/forms/:id/edit' do
+          mustache :'admin/forms/edit'
+        end
+
         app.get '/admin/projects/:project_id/forms/:id' do
           mustache :'admin/forms/show'
         end

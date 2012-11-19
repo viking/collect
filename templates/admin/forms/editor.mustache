@@ -1,0 +1,46 @@
+{{#has_errors?}}
+  <ul class="errors">
+    {{#errors}}
+      <li>{{.}}</li>
+    {{/errors}}
+  </ul>
+{{/has_errors?}}
+
+<form action="{{action_url}}" method="post">
+  <p>
+    <label for="form_name">Name:</label><br/>
+    <input id="form_name" type="text" name="form[name]" value="{{form.name}}" />
+  </p>
+  <div class="sections">
+    {{#sections}}
+      {{> admin/forms/section}}
+    {{/sections}}
+  </div>
+  <p>
+    <input type="submit" value="Create" />
+  </p>
+</form>
+
+<script id="section-template" type="text/template">
+{{{section_template}}}
+</script>
+
+<script id="question-template" type="text/template">
+{{{question_template}}}
+</script>
+
+<script type="text/javascript">
+  var question_types = {{{question_types_json}}};
+  function add_question(section_index) {
+    var container = $('#section-'+section_index+' .questions');
+    var question_index = container.children('.question').length + 1;
+    var view = {
+      section_index: section_index,
+      question: {position: question_index},
+      question_index: question_index,
+      question_types: question_types
+    };
+    var html = $('#question-template').mustache(view, {});
+    container.append(html);
+  }
+</script>

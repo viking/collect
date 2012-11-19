@@ -4,9 +4,9 @@ module Collect
   module Views
     module Admin
       module Forms
-        class New < Editor
+        class Edit < Editor
           def action_url
-            "/admin/projects/#{@project.id}/forms"
+            "/admin/projects/#{form.project_id}/forms/#{form.id}"
           end
         end
       end

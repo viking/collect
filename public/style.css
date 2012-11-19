@@ -8,3 +8,18 @@ body {
   padding: 0.5em 1em;
   font-size: 13pt;
 }
+
+div.section {
+  border: 1px solid #333;
+  border-radius: 5px;
+  padding: 1em;
+  margin: 1em 0;
+  background-color: #f6f6f6;
+}
+
+div.question {
+  border: 1px solid #666;
+  padding: 1em;
+  margin: 1em 0;
+  background-color: #dfdfdf;
+}

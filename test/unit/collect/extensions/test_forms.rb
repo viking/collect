@@ -78,6 +78,16 @@ class TestForms < CollectExtensionTest
     assert_equal 200, last_response.status
   end
 
+  test "edit form" do
+    question = stub('question', :name => 'person_id', :prompt => 'Person ID', :type => 'Integer', :position => 0)
+    section = stub('section', :name => 'main', :position => 0, :questions => [question])
+    form = stub('form', :id => 1, :project_id => 1, :name => 'foo', :sections => [section], :errors => [])
+    @project.stubs(:forms_dataset).returns(mock { expects(:[]).with(:id => '1').returns(form) })
+
+    get '/admin/projects/1/forms/1/edit'
+    assert_equal 200, last_response.status
+  end
+
   test "show form" do
     question = stub('question', :name => 'person_id', :prompt => 'Person ID', :type => 'Integer', :position => 0)
     section = stub('section', :name => 'main', :position => 0, :questions => [question])
