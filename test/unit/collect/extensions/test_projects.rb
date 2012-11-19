@@ -63,8 +63,8 @@ class TestProjects < CollectExtensionTest
       expects(:filter).with(:is_admin => true).returns(self)
       expects(:first).returns(role)
     })
-    form_1 = stub('form 1', :id => 1, :name => 'Demographics', :status => nil, :primary => true, :repeatable => false)
-    form_2 = stub('form 2', :id => 2, :name => 'Visit', :status => nil, :primary => false, :repeatable => true)
+    form_1 = stub('form 1', :id => 1, :name => 'Demographics', :status => nil, :primary => true, :repeatable => false, :published? => false)
+    form_2 = stub('form 2', :id => 2, :name => 'Visit', :status => nil, :primary => false, :repeatable => true, :published? => true)
     project.expects(:forms).returns([form_1, form_2])
 
     get '/admin/projects/1'

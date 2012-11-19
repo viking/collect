@@ -38,6 +38,15 @@ module Collect
           end
           mustache :'admin/forms/edit'
         end
+
+        app.post '/admin/projects/:project_id/forms/:id/publish' do
+          begin
+            @form.publish!
+          rescue FormAlreadyPublishedException
+          end
+
+          redirect "/admin/projects/#{@project.id}"
+        end
       end
     end
     Application.register(Forms)

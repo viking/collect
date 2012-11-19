@@ -3,7 +3,7 @@ require 'helper'
 class TestForms < CollectExtensionTest
   def setup
     super
-    @project = project = stub('project', :id => 1, :name => 'foo')
+    @project = project = stub('project', :id => 1, :name => 'foo', :primary_form => nil)
     @role = role = stub('role', :project => project, :is_admin => true)
     app.before do
       @project = project
@@ -154,5 +154,25 @@ class TestForms < CollectExtensionTest
 
     get '/admin/projects/1/forms/1'
     assert_equal 200, last_response.status
+  end
+
+  test "publish form" do
+    form = stub('form')
+    @project.stubs(:forms_dataset).returns(mock { expects(:[]).with(:id => '1').returns(form) })
+    form.expects(:publish!)
+
+    post '/admin/projects/1/forms/1/publish'
+    assert_equal 302, last_response.status
+    assert_equal 'http://example.org/admin/projects/1', last_response['location']
+  end
+
+  test "publishing an already published form" do
+    form = stub('form')
+    @project.stubs(:forms_dataset).returns(mock { expects(:[]).with(:id => '1').returns(form) })
+    form.expects(:publish!).raises(Collect::FormAlreadyPublishedException)
+
+    post '/admin/projects/1/forms/1/publish'
+    assert_equal 302, last_response.status
+    assert_equal 'http://example.org/admin/projects/1', last_response['location']
   end
 end

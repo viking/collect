@@ -73,12 +73,15 @@ class TestForm < CollectUnitTest
   test "publish a new form" do
     form = new_form(:name => 'foo')
     assert form.save
+    assert !form.published?
 
     section = Collect::Section.create!(:name => 'foo', :form => form)
     question = Collect::Question.create!(:name => 'foo', :prompt => 'Foo?', :type => 'String', :section => section)
 
     form.publish!
+    form.reload
     assert_equal 'published', form.status
+    assert form.published?
 
     @project.database do |db|
       assert_include db.tables, :foos
@@ -102,5 +105,29 @@ class TestForm < CollectUnitTest
       {:name => 'foo', :position => 0}
     ]})
     assert_equal 1, form.sections.length
+  end
+
+  test "requires unpublished form to save" do
+    form = new_form(:name => 'foo')
+    assert form.save
+    section = Collect::Section.create!(:name => 'foo', :form => form)
+    question = Collect::Question.create!(:name => 'foo', :prompt => 'Foo?', :type => 'String', :section => section)
+    form.publish!
+
+    assert !form.update(:name => 'bar')
+  end
+
+  test "requires at most one primary form" do
+    form_1 = new_form(:name => 'foo', :primary => true)
+    assert form_1.save
+
+    form_2 = new_form(:name => 'bar', :primary => true)
+    assert !form_2.valid?
+
+    form_2.primary = false
+    assert form_2.save
+
+    form_2.primary = true
+    assert !form_2.valid?
   end
 end

@@ -79,4 +79,16 @@ class TestProject < CollectUnitTest
 
     assert_equal [user], project.users
   end
+
+  test "primary_form is nil if no form children are primary" do
+    project = new_project
+    project.save
+    assert_nil project.primary_form
+
+    form_1 = Collect::Form.create!(:name => "foo", :project => project)
+    assert_nil project.primary_form(true)
+
+    form_2 = Collect::Form.create!(:name => "bar", :project => project, :primary => true)
+    assert_equal form_2, project.primary_form(true)
+  end
 end

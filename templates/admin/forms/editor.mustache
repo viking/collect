@@ -11,6 +11,15 @@
     <label for="form_name">Name:</label><br/>
     <input id="form_name" type="text" name="form[name]" value="{{form.name}}" />
   </p>
+  {{#show_primary_field?}}
+  <p>
+    <div style="display: none;">
+      <input type="hidden" name="form[primary]" value="false" />
+    </div>
+    <label for="form_primary">Primary form?</label>
+    <input id="form_primary" type="checkbox" name="form[primary]" value="true"{{#form.primary}} checked="checked"{{/form.primary}} />
+  </p>
+  {{/show_primary_field?}}
   <div class="sections">
     {{#sections}}
       {{> admin/forms/section}}
