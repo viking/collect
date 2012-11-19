@@ -16,6 +16,9 @@
     </select>
   </p>
   <div style="display: none;">
+    {{#question.id}}
+    <input type="hidden" name="form[sections_attributes][{{section_index}}][questions_attributes][{{question_index}}][id]" value="{{question.id}}" />
+    {{/question.id}}
     <input type="hidden" name="form[sections_attributes][{{section_index}}][questions_attributes][{{question_index}}][position]" value="{{question.position}}" />
   </div>
 </div>

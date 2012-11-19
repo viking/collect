@@ -30,6 +30,14 @@ module Collect
           end
           mustache :'admin/forms/new'
         end
+
+        app.post '/admin/projects/:project_id/forms/:id' do
+          @form.set(params[:form])
+          if @form.save
+            redirect "/admin/projects/#{@project.id}"
+          end
+          mustache :'admin/forms/edit'
+        end
       end
     end
     Application.register(Forms)

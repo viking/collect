@@ -9,6 +9,9 @@
     {{/questions}}
   </div>
   <div style="display: none;">
+    {{#section.id}}
+    <input type="hidden" name="form[sections_attributes][{{section_index}}][id]" value="{{section.id}}" />
+    {{/section.id}}
     <input type="hidden" name="form[sections_attributes][{{section_index}}][position]" value="{{section.position}}" />
   </div>
   <p>

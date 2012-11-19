@@ -88,6 +88,64 @@ class TestForms < CollectExtensionTest
     assert_equal 200, last_response.status
   end
 
+  test "update form" do
+    attributes = {
+      'name' => 'foo',
+      'sections_attributes' => {
+        '0' => {
+          'name' => 'main',
+          'position' => '0',
+          'questions_attributes' => {
+            '0' => {
+              'name' => 'person_id',
+              'prompt' => 'Person ID',
+              'type' => 'Integer',
+              'position' => '0'
+            }
+          }
+        }
+      }
+    }
+    form = stub('form')
+    @project.stubs(:forms_dataset).returns(mock { expects(:[]).with(:id => '1').returns(form) })
+    form.expects(:set).with(attributes)
+    form.expects(:save).returns(true)
+
+    post '/admin/projects/1/forms/1', 'form' => attributes
+    assert_equal 302, last_response.status
+    assert_equal 'http://example.org/admin/projects/1', last_response['location']
+  end
+
+  test "update form with invalid attributes" do
+    attributes = {
+      'name' => 'foo',
+      'sections_attributes' => {
+        '0' => {
+          'name' => 'main',
+          'position' => '0',
+          'questions_attributes' => {
+            '0' => {
+              'name' => 'person_id',
+              'prompt' => 'Person ID',
+              'type' => 'Integer',
+              'position' => '0'
+            }
+          }
+        }
+      }
+    }
+    question = stub('question', :name => 'person_id', :prompt => 'Person ID', :type => 'Integer', :position => 0)
+    section = stub('section', :name => 'main', :position => 0, :questions => [question])
+    form = stub('form', :id => 1, :project_id => 1, :name => 'foo', :sections => [section])
+    form.expects(:errors).at_least_once.returns(stub(:empty? => false, :full_messages => ['foo']))
+    @project.stubs(:forms_dataset).returns(mock { expects(:[]).with(:id => '1').returns(form) })
+    form.expects(:set).with(attributes)
+    form.expects(:save).returns(false)
+
+    post '/admin/projects/1/forms/1', 'form' => attributes
+    assert_equal 200, last_response.status
+  end
+
   test "show form" do
     question = stub('question', :name => 'person_id', :prompt => 'Person ID', :type => 'Integer', :position => 0)
     section = stub('section', :name => 'main', :position => 0, :questions => [question])
