@@ -1,15 +1,10 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
-gem 'sinatra', :require => 'sinatra/base'
-gem 'sequel'
-gem 'omniauth'
-gem 'mustache'
-gem 'json'
+# Specify your gem's dependencies in collect.gemspec
+gemspec
 
 group :development do
   gem 'bundler'
-  gem 'jeweler'
-  gem 'simplecov'
   gem 'sqlite3'
   gem 'test-unit'
   gem 'rack-test'

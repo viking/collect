@@ -26,6 +26,7 @@ module Collect
 end
 
 path = Collect::Root + 'lib' + 'collect'
+require path + 'version'
 require path + 'exceptions'
 require path + 'models'
 require path + 'utils'
