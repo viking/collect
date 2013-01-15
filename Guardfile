@@ -9,8 +9,7 @@ end
 
 guard 'bundler' do
   watch('Gemfile')
-  # Uncomment next line if Gemfile contain `gemspec' command
-  # watch(/^.+\.gemspec/)
+  watch(/^.+\.gemspec/)
 end
 
 guard 'shell' do
@@ -19,3 +18,12 @@ guard 'shell' do
     `rake db:migrate[development]`
   end
 end
+
+guard 'rack', :force_run => true do
+  watch('Gemfile.lock')
+  watch(%r{^(?:lib|db/migrate)/(?:[^/]+/)*[^.][^/]*\.rb$})
+  #watch(%r{^templates/(?:[^/]+/)*[^.][^/]*\.mustache$})
+  watch('config/database.yml')
+  watch('config.ru')
+end
+

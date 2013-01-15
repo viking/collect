@@ -11,9 +11,8 @@ group :development do
   gem 'guard-test'
   gem 'guard-bundler'
   gem 'guard-shell'
+  gem 'guard-rack', :path => "../guard-rack"
   gem 'mocha'
-  gem 'sinatra-contrib'
-  gem 'rb-inotify'
+  gem 'rb-inotify', '~> 0.8.8'
   gem 'debugger'
-  gem 'thin'
 end
