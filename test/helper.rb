@@ -11,7 +11,7 @@ require 'test/unit'
 require 'rack/test'
 require 'tempfile'
 require 'securerandom'
-require 'mocha'
+require 'mocha/setup'
 
 ENV['RACK_ENV'] = 'test'
 $LOAD_PATH.unshift(File.dirname(__FILE__))

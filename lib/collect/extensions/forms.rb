@@ -9,6 +9,8 @@ module Collect
           end
         end
 
+        # Admin
+        #
         app.get '/admin/projects/:project_id/forms/new' do
           @form = Form.new(:project => @project)
           @form.sections_attributes = [{:name => 'main', :position => 0}]
@@ -46,6 +48,12 @@ module Collect
           end
 
           redirect "/admin/projects/#{@project.id}"
+        end
+
+        # Non-admin
+        #
+        app.get '/projects/:project_id/forms/:id' do
+          mustache :'forms/show'
         end
       end
     end

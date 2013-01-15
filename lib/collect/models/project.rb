@@ -4,8 +4,6 @@ module Collect
     one_to_many :roles
     many_to_many :users, :join_table => :roles
     one_to_many :forms
-    one_to_one :primary_form, :read_only => true, :class => "Collect::Form",
-      :conditions => { :primary => true }
 
     def database(&block)
       opts = {:adapter => database_adapter}.merge(database_options || {})

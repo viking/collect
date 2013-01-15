@@ -13,11 +13,6 @@ module Collect
             form.errors.full_messages
           end
 
-          def show_primary_field?
-            primary_form = project.primary_form
-            primary_form.nil? || form == primary_form
-          end
-
           def sections
             @sections ||= form.sections.collect.with_index do |section, i|
               questions = section.questions.collect.with_index do |question, j|

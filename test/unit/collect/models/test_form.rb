@@ -116,18 +116,4 @@ class TestForm < CollectUnitTest
 
     assert !form.update(:name => 'bar')
   end
-
-  test "requires at most one primary form" do
-    form_1 = new_form(:name => 'foo', :primary => true)
-    assert form_1.save
-
-    form_2 = new_form(:name => 'bar', :primary => true)
-    assert !form_2.valid?
-
-    form_2.primary = false
-    assert form_2.save
-
-    form_2.primary = true
-    assert !form_2.valid?
-  end
 end

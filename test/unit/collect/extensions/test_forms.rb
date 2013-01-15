@@ -3,7 +3,7 @@ require 'helper'
 class TestForms < CollectExtensionTest
   def setup
     super
-    @project = project = stub('project', :id => 1, :name => 'foo', :primary_form => nil)
+    @project = project = stub('project', :id => 1, :name => 'foo')
     @role = role = stub('role', :project => project, :is_admin => true)
     app.before do
       @project = project
@@ -146,7 +146,7 @@ class TestForms < CollectExtensionTest
     assert_equal 200, last_response.status
   end
 
-  test "show form" do
+  test "show form for admin" do
     question = stub('question', :name => 'person_id', :prompt => 'Person ID', :type => 'Integer', :position => 0)
     section = stub('section', :name => 'main', :position => 0, :questions => [question])
     form = stub('form', :name => 'foo', :sections => [section])
@@ -174,5 +174,15 @@ class TestForms < CollectExtensionTest
     post '/admin/projects/1/forms/1/publish'
     assert_equal 302, last_response.status
     assert_equal 'http://example.org/admin/projects/1', last_response['location']
+  end
+
+  test "show form for non-admin" do
+    question = stub('question', :name => 'person_id', :prompt => 'Person ID', :type => 'Integer', :position => 0)
+    section = stub('section', :name => 'main', :position => 0, :questions => [question])
+    form = stub('form', :name => 'foo', :sections => [section])
+    @project.stubs(:forms_dataset).returns(mock { expects(:[]).with(:id => '1').returns(form) })
+
+    get '/projects/1/forms/1'
+    assert_equal 200, last_response.status
   end
 end

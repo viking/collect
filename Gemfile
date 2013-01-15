@@ -15,4 +15,5 @@ group :development do
   gem 'mocha'
   gem 'rb-inotify', '~> 0.8.8'
   gem 'debugger'
+  gem 'rake'
 end

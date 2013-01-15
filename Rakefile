@@ -1,9 +1,16 @@
 require "bundler/gem_tasks"
+require "rake/testtask"
 
 task :environment, :env do |cmd, args|
   ENV["RACK_ENV"] = args[:env] || "development"
   require "./lib/collect"
 end
+
+Rake::TestTask.new do |t|
+  t.libs << "test"
+  t.pattern = 'test/**/test*.rb'
+end
+task :default => :test
 
 namespace :db do
   desc "Run database migrations"

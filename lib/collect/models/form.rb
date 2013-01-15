@@ -47,15 +47,6 @@ module Collect
       if initial_value(:status) == 'published'
         errors.add(:status, "is published; no changes allowed")
       end
-
-      if project_id && primary
-        ds = self.class.dataset.filter(:primary => true, :project_id => project_id)
-        ds = ds.filter(~{:id => id}) if !new?
-
-        if ds.count > 0
-          errors.add(:primary, "cannot be true for more than one form")
-        end
-      end
     end
   end
 end
