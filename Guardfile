@@ -1,9 +1,19 @@
-guard :test do
-  watch(%r{^lib/((?:[^/]+\/)*)(.+)\.rb$})     { |m| "test/unit/#{m[1]}test_#{m[2]}.rb" }
+guard 'rack', :force_run => true do
+  watch('Gemfile.lock')
+  watch(%r{^(?:lib|db/migrate)/(?:[^/]+/)*[^.][^/]*\.rb$})
+  #watch(%r{^templates/(?:[^/]+/)*[^.][^/]*\.mustache$})
+  watch('config/database.yml')
+  watch('config.ru')
+end
+
+guard 'test' do
+  watch(%r{^lib/((?:[^/]+\/)*)(.+)\.rb$}) do |m|
+    "test/unit/#{m[1]}test_#{m[2]}.rb"
+  end
   watch(%r{^test/((?:[^/]+\/)*)test.+\.rb$})
-  watch('test/helper.rb')  { "test" }
-  watch(%r{^views/(?:([^/]+)\/)?.+\.erb}) do |m|
-    m[1] ? "test/unit/collect/extensions/test_#{m[1]}.rb" : "test/unit/collect/test_application.rb"
+  watch('test/helper.rb') { 'test' }
+  watch(%r{^templates/(?:([^/]+)\/)?.+\.mustache}) do |m|
+    m[1] ? "test/unit/collect/extensions/test_#{m[1]}.rb" : 'test/unit/collect/test_application.rb'
   end
 end
 
@@ -18,12 +28,3 @@ guard 'shell' do
     `rake db:migrate[development]`
   end
 end
-
-guard 'rack', :force_run => true do
-  watch('Gemfile.lock')
-  watch(%r{^(?:lib|db/migrate)/(?:[^/]+/)*[^.][^/]*\.rb$})
-  #watch(%r{^templates/(?:[^/]+/)*[^.][^/]*\.mustache$})
-  watch('config/database.yml')
-  watch('config.ru')
-end
-
