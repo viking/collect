@@ -85,4 +85,11 @@ class TestProject < CollectUnitTest
     project.save
     assert_equal 'development', project.status
   end
+
+  test "production subset" do
+    project = new_project(:status => 'production')
+    project.save
+    assert_equal 1, Collect::Project.production.count
+    assert_equal project, Collect::Project.production.first
+  end
 end

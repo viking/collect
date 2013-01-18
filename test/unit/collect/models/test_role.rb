@@ -34,4 +34,14 @@ class TestRole < CollectUnitTest
     role = new_role(:is_admin => true)
     assert role.is_admin?
   end
+
+  test "admin subset" do
+    user_1 = Collect::User.create!(:username => 'foo')
+    user_2 = Collect::User.create!(:username => 'bar')
+    project = Collect::Project.create!(:name => 'baz', :database_adapter => 'sqlite')
+    role_1 = Collect::Role.create!(:user => user_1, :project => project)
+    role_2 = Collect::Role.create!(:user => user_1, :project => project, :is_admin => true)
+
+    assert_equal [role_2], Collect::Role.admin.all
+  end
 end

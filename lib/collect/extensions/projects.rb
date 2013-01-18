@@ -3,21 +3,24 @@ module Collect
     module Projects
       def self.registered(app)
         app.before %r{^(/admin)?/projects/(\d+)} do |admin, project_id|
-          dataset = Role.filter(:project_id => project_id, :user_id => current_user.id)
-          if admin
-            dataset = dataset.filter(:is_admin => true)
-          end
-          @role = dataset.first
+          dataset =
+            if admin
+              current_user.roles_dataset.admin
+            else
+              current_user.roles_with_active_projects_dataset
+            end
+
+          @role = dataset.filter(:project_id => project_id).first
 
           if @role
             @project = @role.project
           else
-            halt 403
+            halt 404
           end
         end
 
         app.get '/projects' do
-          @roles = current_user.roles
+          @roles = current_user.roles_with_active_projects
           mustache :'projects/index'
         end
 

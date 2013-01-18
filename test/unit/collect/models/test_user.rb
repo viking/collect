@@ -37,4 +37,28 @@ class TestUser < CollectUnitTest
 
     assert_equal [project], user.projects
   end
+
+  test "roles_with_active_projects" do
+    user = new_user
+    assert user.save
+
+    project_1 = Collect::Project.create!({
+      :name => 'foo', :database_adapter => 'sqlite',
+      :status => 'development'
+    })
+    project_2 = Collect::Project.create!({
+      :name => 'bar', :database_adapter => 'sqlite',
+      :status => 'production'
+    })
+    project_3 = Collect::Project.create!({
+      :name => 'baz', :database_adapter => 'sqlite',
+      :status => 'development'
+    })
+
+    role_1 = Collect::Role.create!(:user => user, :project => project_1, :is_admin => true)
+    role_2 = Collect::Role.create!(:user => user, :project => project_2)
+    role_3 = Collect::Role.create!(:user => user, :project => project_3)
+
+    assert_equal [role_1, role_2], user.roles_with_active_projects
+  end
 end

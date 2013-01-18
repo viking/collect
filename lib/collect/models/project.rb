@@ -4,6 +4,7 @@ module Collect
     one_to_many :roles
     many_to_many :users, :join_table => :roles
     one_to_many :forms
+    subset :production, :status => 'production'
 
     def database(&block)
       opts = {:adapter => database_adapter}.merge(database_options || {})
