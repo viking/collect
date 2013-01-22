@@ -46,6 +46,18 @@ module Collect
           @forms = @project.forms
           mustache :'admin/projects/show'
         end
+
+        app.get '/admin/projects/:id/edit' do
+          mustache :'admin/projects/edit'
+        end
+
+        app.post '/admin/projects/:id' do
+          @project.set(params['project'])
+          if @project.save
+            redirect "/admin/projects/#{@project.id}"
+          end
+          mustache :'admin/projects/edit'
+        end
       end
     end
     Application.register(Projects)

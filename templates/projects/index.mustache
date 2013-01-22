@@ -9,6 +9,7 @@
     <a href="/projects/{{project.id}}">{{project.name}}</a>
     {{#is_admin}}
       [ <a href="/admin/projects/{{project.id}}">admin</a> ]
+      [ <a href="/admin/projects/{{project.id}}/edit">edit</a> ]
     {{/is_admin}}
   </li>
 {{/roles}}

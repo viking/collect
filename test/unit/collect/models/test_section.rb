@@ -23,6 +23,11 @@ class TestSection < CollectUnitTest
     assert !section.valid?
   end
 
+  test "requires form_id" do
+    section = new_section(:form => nil)
+    assert !section.valid?
+  end
+
   test "many_to_one form" do
     section = new_section
     assert_respond_to section, :form
@@ -33,10 +38,36 @@ class TestSection < CollectUnitTest
     assert_respond_to section, :questions
   end
 
-  test "accepts nested attributes for questions" do
-    section = new_section({:questions_attributes => [
-      {:name => 'foo', :prompt => 'foo?', :type => 'string'}
-    ]})
+  test "accepts nested attributes array for questions" do
+    section = new_section(:questions_attributes => [
+      {:name => 'foo', :prompt => 'foo?', :type => 'String'}
+    ])
+    assert section.save
     assert_equal 1, section.questions.length
+  end
+
+  test "accepts nested attributes hash for questions" do
+    section = new_section(:questions_attributes => {
+      '0' => {'name' => 'foo', 'prompt' => 'foo?', 'type' => 'String'}
+    })
+    assert section.save
+    assert_equal 1, section.questions.length
+  end
+
+  test "child validation failure causes rollback" do
+    section = new_section(:questions_attributes => [{}])
+    assert !section.save
+  end
+
+  test "can't be created if parent form belongs to project in production" do
+    @project.update(:status => 'production')
+    section = new_section
+    assert !section.save
+  end
+
+  test "can't be updated if parent form belongs to project in production" do
+    section = new_section.save
+    @project.update(:status => 'production')
+    assert !section.update(:name => 'bar')
   end
 end

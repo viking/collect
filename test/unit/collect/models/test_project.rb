@@ -92,4 +92,29 @@ class TestProject < CollectUnitTest
     assert_equal 1, Collect::Project.production.count
     assert_equal project, Collect::Project.production.first
   end
+
+  test "moving to production creates tables" do
+    project = new_project.save
+    form = Collect::Form.create!(:name => 'foo', :project => project,
+      :sections_attributes => [{
+        :name => 'main',
+        :questions_attributes => [
+          {:name => 'first_name', :prompt => 'First name:', :type => 'String'},
+          {:name => 'last_name', :prompt => 'Last name:', :type => 'String'}
+        ]
+      }])
+    project.update(:status => 'production')
+    project.database do |db|
+      assert_include db.tables, :records
+      assert_include db.tables, :foos
+      assert_equal [:id, :first_name, :last_name, :record_id],
+        db.schema(:foos).collect(&:first)
+    end
+  end
+
+  test "can't save after in production" do
+    project = new_project(:status => 'production').save
+    assert !project.update(:status => 'development')
+    assert !project.update(:name => 'blah')
+  end
 end

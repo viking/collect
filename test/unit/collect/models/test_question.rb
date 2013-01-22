@@ -66,4 +66,21 @@ class TestQuestion < CollectUnitTest
     question = new_question(:type => 'junk')
     assert !question.valid?
   end
+
+  test "requires section_id" do
+    question = new_question(:section => nil)
+    assert !question.valid?
+  end
+
+  test "can't be created if parent form belongs to project in production" do
+    @project.update(:status => 'production')
+    question = new_question
+    assert !question.save
+  end
+
+  test "can't be updated if parent form belongs to project in production" do
+    question = new_question.save
+    @project.update(:status => 'production')
+    assert !question.update(:name => 'bar')
+  end
 end

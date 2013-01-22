@@ -7,13 +7,7 @@
 {{#forms}}
   <li>
     <a href="/admin/projects/{{project_id}}/forms/{{id}}">{{name}}</a>
-    {{#published?}}
-    [ published ]
-    {{/published?}}
-    {{^published?}}
     [ <a href="/admin/projects/{{project_id}}/forms/{{id}}/edit">edit</a> ]
-    [ <a class="publish" href="/admin/projects/{{project_id}}/forms/{{id}}/publish">publish</a> ]
-    {{/published?}}
   </li>
 {{/forms}}
 </ul>

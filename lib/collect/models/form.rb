@@ -3,34 +3,7 @@ module Collect
     many_to_one :project
     one_to_many :sections
 
-    plugin :nested_attributes
-    nested_attributes :sections
-
-    plugin :dirty
-
-    def publish!
-      if status == 'published'
-        raise FormAlreadyPublishedException
-      end
-
-      project.database do |db|
-        ds = sections_dataset.naked.
-          select(:questions.*).
-          join(:questions, :section_id => :id)
-
-        db.create_table(slug.pluralize) do
-          primary_key :id
-          ds.each do |question|
-            send(question[:type], question[:name])
-          end
-        end
-      end
-      update(:status => 'published')
-    end
-
-    def published?
-      initial_value(:status) == 'published'
-    end
+    attr_writer :sections_attributes
 
     def before_validation
       super
@@ -44,9 +17,32 @@ module Collect
       validates_presence [:name, :project_id]
       validates_unique :name, :slug
 
-      if initial_value(:status) == 'published'
-        errors.add(:status, "is published; no changes allowed")
+      if errors.on(:project_id).nil? && project.status == "production"
+        errors.add(:base, "cannot be saved; project is in production")
       end
+    end
+
+    def after_save
+      sections_attributes =
+        case @sections_attributes
+        when Array
+          @sections_attributes
+        when Hash
+          @sections_attributes.values
+        else
+          nil
+        end
+
+      if sections_attributes
+        sections_attributes.each do |section_attributes|
+          section = Section.new(section_attributes.merge(:form_id => pk))
+          if !section.save
+            raise Sequel::Rollback
+          end
+        end
+      end
+
+      super
     end
   end
 end

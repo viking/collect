@@ -4,13 +4,13 @@ module Collect
   module Views
     module Admin
       module Projects
-        class New < Editor
+        class Edit < Editor
           def form_url
-            "/admin/projects"
+            "/admin/projects/#{@project.id}"
           end
 
           def submit_value
-            "Create"
+            "Update"
           end
         end
       end

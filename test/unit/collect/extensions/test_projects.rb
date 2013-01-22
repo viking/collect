@@ -31,7 +31,8 @@ class TestProjects < CollectExtensionTest
   end
 
   test "new project form" do
-    project = stub('new project', :name => nil, :errors => stub(:empty? => true))
+    project = stub('new project', :name => nil, :status => nil,
+      :errors => stub(:empty? => true))
     Collect::Project.expects(:new).returns(project)
     get '/admin/projects/new'
   end
@@ -49,12 +50,49 @@ class TestProjects < CollectExtensionTest
   end
 
   test "creating an invalid project" do
-    project = stub('new project', :name => 'foo')
+    project = stub('new project', :name => 'foo', :status => 'development')
     Collect::Project.expects(:new).with('name' => 'foo').returns(project)
     project.expects(:save).returns(false)
     project.expects(:errors).at_least_once.returns(stub(:empty? => false, :full_messages => ['foo']))
 
     post '/admin/projects', {'project' => {'name' => 'foo'}}
+    assert_equal 200, last_response.status
+  end
+
+  test "editing a project" do
+    project = stub('project', :id => 1, :name => 'foo', :status => 'development',
+      :errors => stub(:empty? => true))
+    role = stub('role', :project => project, :is_admin => true)
+    @admin_roles_dataset.expects(:filter).with(:project_id => '1').
+      returns(mock(:first => role))
+
+    get '/admin/projects/1/edit'
+    assert_equal 200, last_response.status
+  end
+
+  test "updating a project" do
+    project = stub('project', :id => 1, :name => 'foo', :status => 'development')
+    role = stub('role', :project => project, :is_admin => true)
+    @admin_roles_dataset.expects(:filter).with(:project_id => '1').
+      returns(mock(:first => role))
+
+    project.expects(:set).with('name' => 'bar')
+    project.expects(:save).returns(true)
+    post '/admin/projects/1', {'project' => {'name' => 'bar'}}
+    assert_equal 302, last_response.status
+    assert_equal 'http://example.org/admin/projects/1', last_response['location']
+  end
+
+  test "updating a project with bad values" do
+    project = stub('project', :id => 1, :name => 'foo', :status => 'development')
+    role = stub('role', :project => project, :is_admin => true)
+    @admin_roles_dataset.expects(:filter).with(:project_id => '1').
+      returns(mock(:first => role))
+
+    project.expects(:set).with('name' => '')
+    project.expects(:save).returns(false)
+    project.expects(:errors).at_least_once.returns(stub(:empty? => false, :full_messages => ['foo']))
+    post '/admin/projects/1', {'project' => {'name' => ''}}
     assert_equal 200, last_response.status
   end
 

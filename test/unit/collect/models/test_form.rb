@@ -1,16 +1,16 @@
 require 'helper'
 
 class TestForm < CollectUnitTest
+  def setup
+    super
+    @project = Collect::Project.create!(:name => 'foo', :database_adapter => 'sqlite')
+  end
+
   def new_form(attribs = {})
     Collect::Form.new({
       :name => 'foo',
       :project => @project
     }.merge(attribs))
-  end
-
-  def setup
-    super
-    @project = Collect::Project.create!(:name => 'foo', :database_adapter => 'sqlite')
   end
 
   test "sequel model" do
@@ -70,50 +70,38 @@ class TestForm < CollectUnitTest
     assert_respond_to form, :sections
   end
 
-  test "publish a new form" do
-    form = new_form(:name => 'foo')
-    assert form.save
-    assert !form.published?
-
-    section = Collect::Section.create!(:name => 'foo', :form => form)
-    question = Collect::Question.create!(:name => 'foo', :prompt => 'Foo?', :type => 'String', :section => section)
-
-    form.publish!
-    form.reload
-    assert_equal 'published', form.status
-    assert form.published?
-
-    @project.database do |db|
-      assert_include db.tables, :foos
-      assert_equal [:id, :foo], db[:foos].columns
-    end
-  end
-
-  test "publishing an already published form" do
-    form = new_form(:name => 'foo')
-    assert form.save
-
-    section = Collect::Section.create!(:name => 'foo', :form => form)
-    question = Collect::Question.create!(:name => 'foo', :prompt => 'Foo?', :type => 'String', :section => section)
-
-    form.publish!
-    assert_raises(Collect::FormAlreadyPublishedException) { form.publish! }
-  end
-
-  test "accepts nested attributes for sections" do
+  test "accepts nested attributes array for sections" do
     form = new_form({:sections_attributes => [
       {:name => 'foo', :position => 0}
     ]})
+    assert form.save
     assert_equal 1, form.sections.length
   end
 
-  test "requires unpublished form to save" do
+  test "accepts nested attributes hash for sections" do
+    form = new_form('sections_attributes' => {
+      '0' => {'name' => 'foo', 'position' => '0'}
+    })
+    assert form.save
+    assert_equal 1, form.sections.length
+  end
+
+  test "child validation failure causes rollback" do
+    form = new_form(:sections_attributes => [{}])
+    assert !form.save
+  end
+
+  test "forms that belong to published projects can't be created" do
+    @project.update(:status => 'production')
+
+    form = new_form(:name => 'foo')
+    assert !form.save
+  end
+
+  test "forms that belong to published projects can't be updated" do
     form = new_form(:name => 'foo')
     assert form.save
-    section = Collect::Section.create!(:name => 'foo', :form => form)
-    question = Collect::Question.create!(:name => 'foo', :prompt => 'Foo?', :type => 'String', :section => section)
-    form.publish!
-
+    @project.update(:status => 'production')
     assert !form.update(:name => 'bar')
   end
 end
